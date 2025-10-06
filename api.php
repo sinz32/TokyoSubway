@@ -22,11 +22,12 @@ if ($lineId == 'A') {
         }
         $stn = explode('.', $stn);
         $stn = $stn[count($stn)-1];
+        $terminal = explode('.', $data[$n]['odpt:destinationStation']);
         $data[$n] = array(
             'no' => $data[$n]['odpt:trainNumber'],
             'stn' => $stn,
             'sts' => $sts,
-            'terminal' => $data[$n]['odpt:destinationStation']
+            'terminal' => $terminal[count($terminal)-1]
         );
     }
 
