@@ -20,6 +20,8 @@ if ($lineId == 'A') {
             $stn = $data[$n]['odpt:fromStation'];
             $sts = '도착';
         }
+        $stn = explode('.', $stn);
+        $stn = $stn[count($stn)-1];
         $data[$n] = array(
             'no' => $data[$n]['odpt:trainNumber'],
             'stn' => $stn,
