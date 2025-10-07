@@ -4,13 +4,32 @@ header('Content-Type: application/json; charset=utf-8');
 
 $lineId = $_GET['lineId'];
 
-if ($lineId == 'A') {
+if ($lineId == 'A' || $lineId == 'I' || $lineId == 'S' || $lineId == 'E') {
+    $railway = array(
+        'A' => 'Asakusa',
+        'I' => 'Mita',
+        'S' => 'Shinjuku',
+        'E' => 'Oedo'
+    );
     $url = 'https://api-public.odpt.org/api/v4/odpt:Train?'
-        .'odpt:operator=odpt.Operator:Toei&odpt:railway=odpt.Railway:Toei.Asakusa';
+        .'odpt:operator=odpt.Operator:Toei&odpt:railway=odpt.Railway:Toei.'.$railway[$lineId];
     $data = json_decode(http_get($url), true);
-    $stn_list = ['NishiMagome','Magome','Nakanobu','Togoshi','Gotanda','Takanawadai','Sengakuji','Mita','Daimon','Shimbashi','HigashiGinza','Takaracho','Nihombashi','Ningyocho','HigashiNihombashi','Asakusabashi','Kuramae','Asakusa','HonjoAzumabashi','Oshiage'];
-    $stn_list_ja = ['西馬込','馬込','中延','戸越','五反田','高輪台','泉寺','三田','大門','新橋','東銀座','宝町','日本橋','人形町','東日本橋','浅草橋','蔵前','浅草','本所吾橋','押上'];
-    $stn_list_ko = ['니시마고메','마고메','나카노부','토고시','고탄다','타카나와다이','센가쿠지','미타','다이몬','신바시','히가시긴자','타카라초','니혼바시','닌교초','히가시니혼바시','아사쿠사바시','쿠라마에','아사쿠사','혼조아즈마바시','오시아게'];
+
+    if ($lineId == 'A') {
+        $stn_list = ['NishiMagome','Magome','Nakanobu','Togoshi','Gotanda','Takanawadai','Sengakuji','Mita','Daimon','Shimbashi','HigashiGinza','Takaracho','Nihombashi','Ningyocho','HigashiNihombashi','Asakusabashi','Kuramae','Asakusa','HonjoAzumabashi','Oshiage'];
+        $stn_list_ja = ['西馬込','馬込','中延','戸越','五反田','高輪台','泉寺','三田','大門','新橋','東銀座','宝町','日本橋','人形町','東日本橋','浅草橋','蔵前','浅草','本所吾橋','押上'];
+        $stn_list_ko = ['니시마고메','마고메','나카노부','토고시','고탄다','타카나와다이','센가쿠지','미타','다이몬','신바시','히가시긴자','타카라초','니혼바시','닌교초','히가시니혼바시','아사쿠사바시','쿠라마에','아사쿠사','혼조아즈마바시','오시아게'];
+    }
+    if ($lineId == 'I') {
+
+    }
+    if ($lineId == 'S') {
+
+    }
+    if ($lineId == 'E') {
+
+    }
+
 
     $is_up = array(
         'A' => 'odpt.RailDirection:Southbound',
