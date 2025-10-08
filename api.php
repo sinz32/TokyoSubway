@@ -36,7 +36,7 @@ if ($lineId == 'A' || $lineId == 'I' || $lineId == 'S' || $lineId == 'E') {
         $stn_list_ko = ['도초마에','신주쿠니시구치','히가시신주쿠','와카마츠카와다','우시고메야나기초','우시고메카구라자카','이다바시','카스가','혼고산초메','우에노오카치마치','신오카치마치','쿠라마에','료고쿠','모리시타','키요스미시라카와','몬젠나카쵸','츠키시마','카치도키','츠키지시조','시오도메','다이몬','아카바네바시','아자부쥬반','롯폰기','아오야마잇초메','코쿠리츠쿄기죠','요요기','신주쿠','도초마에','니시신주쿠고초메','나카노사카우에','히가시나카노','나카이','오치아이미나미나가사키','신에고타','네리마','토시마엔','네리마카스가초','히카리가오카'];
     }
 
-
+    include('toei_terminals.php');
     $is_up = array(
         'A' => 'odpt.RailDirection:Southbound',
         'I' => 'odpt.RailDirection:Southbound',
@@ -45,16 +45,22 @@ if ($lineId == 'A' || $lineId == 'I' || $lineId == 'S' || $lineId == 'E') {
     );
 
     for($n=0;$n<count($data);$n++){
-        $datum = $data[$n];
         $stn = $data[$n]['odpt:toStation'];
         $sts = '접근';
         if ($stn == null) {
             $stn = $data[$n]['odpt:fromStation'];
             $sts = '도착';
         }
+
         $stn = explode('.', $stn);
         $stn = $stn[count($stn)-1];
+
         $terminal = explode('.', $data[$n]['odpt:destinationStation'][0]);
+        $terminal = $terminal[count($terminal)-1];
+        if(isset($terminals[$terminal])) {
+            $terminal = $terminals[$terminal];
+        }
+
         $dir = 'down';
         if ($is_up[$lineId] == $data[$n]['odpt:railDirection']) {
             $dir = 'up';
@@ -64,10 +70,11 @@ if ($lineId == 'A' || $lineId == 'I' || $lineId == 'S' || $lineId == 'E') {
             'no' => $data[$n]['odpt:trainNumber'],
             'stn' => $stn,
             'sts' => $sts,
-            'terminal' => $terminal[count($terminal)-1],
+            'terminal' => $terminal,
             'dir' => $dir 
         );
     }
+
 
     $result = array();
     for($n=0;$n<count($stn_list);$n++){
