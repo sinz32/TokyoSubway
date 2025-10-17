@@ -1,6 +1,7 @@
 <?php
 ini_set('display_errors', 1);
 header('Content-Type: application/json; charset=utf-8');
+date_default_timezone_set('Asia/Seoul');
 
 $lineId = $_GET['lineId'];
 
@@ -156,7 +157,8 @@ if ($lineId == 'A' || $lineId == 'I' || $lineId == 'S' || $lineId == 'E') {
             if ($stn_list[$n] == $trains[$m]['stn']) {
                 $result[$n][$trains[$m]['dir']][] = array(
                     'no' => $trains[$m]['no'],
-                    'terminal' => $trains[$m]['terminal']
+                    'terminal' => $trains[$m]['terminal'],
+                    'type' => $trains[$m]['type']
                 );
             }
         }
