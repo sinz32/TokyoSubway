@@ -96,6 +96,74 @@ if ($lineId == 'A' || $lineId == 'I' || $lineId == 'S' || $lineId == 'E') {
 
     echo json_encode($result, JSON_UNESCAPED_UNICODE);
 
+} else if ($lineId == 'H') {
+
+    $stn_list = ['나카메구로','에비스','히로오','롯폰기','카미야쵸','토라노몬힐즈','카스미가세키','히비야','긴자','히가시긴자','츠키지','핫쵸보리','카야바쵸','닌교초','코덴마쵸','아키하바라','나카오카치마치','우에노','이리야','미노와','미나미센쥬','키타센쥬'];
+    $result = [];
+
+
+    $day = date('N');
+    if ($day > 5) $file_name = $lineId.'_e'; //주말
+    else $file_name = $lineId.'_d';          //평일
+
+    $data = file_get_contents('./timetable/'.$file_name.'.json');
+    $data = json_decode($data, true);
+
+    $now = t2m(date('H:i'));
+    $trains = [];
+    for ($n = 0; $n < count($data); $n++) {
+        //아직 출발하지 않은 열차
+        $t1 = $data[$n]['time'][0]['t'];
+        if ($now < t2m($t1)) continue;
+
+        //운행이 끝난 열차
+        $t2 = $data[$n]['time'][count($data[$n]['time']) - 1]['t'];
+        if (t2m($t2) < $now) continue;
+
+        //열차가 있어야 할 위치 찾기
+        $time = $data[$n]['time'];
+        for ($m = count($time) - 1; $m >= 0; $m--) {
+            $t = t2m($time[$m]['t']);
+            if ($now == $t) { //역 도착
+                $stn = $time[$m]['s'];
+                break;
+            }
+            if ($now > $t) { //역 접근
+                $stn = $time[$m + 1]['s'];
+                break;
+            }
+        }
+
+        //운행 중인 열차 목록에 열차 추가
+        $trains[] = array(
+            'no' => $data[$n]['no'],
+            'terminal' => $data[$n]['terminal'],
+            'type' => $data[$n]['type'],
+            'dir' => $data[$n]['dir'],
+            'stn' => $stn
+        );
+    }
+
+    $result = array();
+    for($n=0;$n<count($stn_list);$n++){
+        $result[$n] = array(
+            // 'stn' => $stn_list_ja[$n].' ('.$stn_list_ko[$n].')',
+            'stn' => $stn_list[$n],
+            'up' => array(),
+            'down' => array()
+        );
+        for($m=0;$m<count($trains);$m++){
+            if ($stn_list[$n] == $trains[$m]['stn']) {
+                $result[$n][$trains[$m]['dir']][] = array(
+                    'no' => $trains[$m]['no'],
+                    'terminal' => $trains[$m]['terminal']
+                );
+            }
+        }
+    }
+
+    echo json_encode($result, JSON_UNESCAPED_UNICODE);
+
 } else {
     echo '{}';
 }
@@ -109,4 +177,10 @@ function http_get($url){
     curl_close($ch);
     return $response;
 }
+
+function t2m($time){ //time to minutes. h:mm -> min
+    $t = explode(':', $time);
+    return (int)$t[0]*60 + (int)$t[1];
+}
+
 ?>
