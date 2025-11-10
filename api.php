@@ -1,5 +1,6 @@
 <?php
 ini_set('display_errors', 1);
+header('Access-Control-Allow-Origin: *'); //임시로 넣음
 header('Content-Type: application/json; charset=utf-8');
 date_default_timezone_set('Asia/Seoul');
 
