@@ -59,5 +59,16 @@ text-align: center;
 © 2023-2025 SinZ, All rights reserved.
 </div>
 
+<script>
+loadData('A');
+function loadData(lineId) {
+    var url = 'https://metro.sinz.me/tokyo/api';
+	fetch(url + '?lineId=' + lineId)
+		.then((response) => response.json())
+		.then((data) => {
+			alert(JSON.stringify(data, null, 4));
+		});
+}
+</script>
 </body>
 </html>
