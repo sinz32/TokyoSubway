@@ -55,6 +55,11 @@
         font-size: 0.8rem;
         text-align: center;
     }
+
+    text.stn {
+        text-anchor: middle;
+        font-size: 22px;
+    }
 </style>
 
 <body>
@@ -127,8 +132,8 @@
             var json = JSON.stringify(data);
             return '<line x1="50" y1="' + cy + '" x2="150" y2="' + cy + '" stroke="#EEE" />' +
                 '<line x1="650" y1="' + cy + '" x2="750" y2="' + cy + '" stroke="#EEE" />' +
-                '<text class="stn" x=' + x + ' y=' + (y + 12 - 12) + ' fill=' + color + ' onclick=\'showTrainInfo(' + json + ');\'>' + data.stn.ja + '</text>' +
-                '<text class="stn" x=' + x + ' y=' + (y + 12 + 12) + ' fill=' + color + ' onclick=\'showTrainInfo(' + json + ');\'>' + data.stn.ko + '</text>' +
+                '<text class="stn" x=' + x + ' y=' + (y - 6) + ' fill=' + color + ' onclick=\'showTrainInfo(' + json + ');\'>' + data.stn.ja + '</text>' +
+                '<text class="stn" x=' + x + ' y=' + (y + 22) + ' fill=' + color + ' onclick=\'showTrainInfo(' + json + ');\'>' + data.stn.ko + '</text>' +
                 circle;
         }
     </script>
