@@ -81,7 +81,10 @@ if ($lineId == 'A' || $lineId == 'I' || $lineId == 'S' || $lineId == 'E') {
     $result = array();
     for($n=0;$n<count($stn_list);$n++){
         $result[$n] = array(
-            'stn' => $stn_list_ja[$n].' ('.$stn_list_ko[$n].')',
+            'stn' => array(
+                'ja' => $stn_list_ja[$n],
+                'ko' => $stn_list_ko[$n],
+            ),
             'up' => array(),
             'down' => array()
         );
@@ -187,7 +190,10 @@ if ($lineId == 'A' || $lineId == 'I' || $lineId == 'S' || $lineId == 'E') {
     $result = [];
     for($n=0;$n<count($stn_list);$n++){
         $result[$n] = array(
-            'stn' => $stn_list_ja[$n].' ('.$stn_list[$n].')',
+            'stn' => array(
+                'ja' => $stn_list_ja[$n],
+                'ko' => $stn_list[$n],
+            ),
             'up' => array(),
             'down' => array()
         );
