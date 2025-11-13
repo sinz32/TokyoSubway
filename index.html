@@ -84,7 +84,7 @@
     </div>
 
     <script>
-        // loadData('A');
+        loadData('A');
 
         function loadData(lineId) {
             var url = 'htt'+'ps://me'+'tro.si'+'nz.me/tokyo/api';
@@ -92,7 +92,44 @@
                 .then((response) => response.json())
                 .then((data) => {
                     alert(JSON.stringify(data, null, 4));
+                    applyData(data);
                 });
+        }
+
+        function applyData(data, lineId) {
+            var color = '#000';
+            var src = '';
+            src += drawLine(data);
+            document.getElementById('metro_map').innerHTML = src;
+        }
+
+
+        function drawLine(data, lineId) {
+            var m = 100;
+            var height = m * data.length;
+            var src = '<svg viewbox="0 -50 800 ' + height + '" >';
+            src += '<line x1="50" y1="-20" x2="50" y2="' + (height-80) + '" stroke="' + data.color + '" />';
+            src += '<line x1="750" y1="-20" x2="750" y2="' + (height-80) + '" stroke="' + data.color + '" />';
+            data.forEach((e, i) => {
+                src += station(400, m*i, e);
+                // src += metro_up(50, m*i, e.up);
+                // src += metro_dn(750, m*i, e.down);
+            });
+            
+            src += '</svg>';
+            return src;
+        }
+
+        function station(x, y, data, color) {
+            var cx = x + 0;
+            var cy = y;
+            var circle = '<circle cx="' + (cx - 350) + '" cy="' + cy + '" r="9"/><circle cx="' + (cx + 350) + '" cy="' + cy + '" r="9"/>';
+            var json = JSON.stringify(data);
+            return '<line x1="50" y1="' + cy + '" x2="150" y2="' + cy + '" stroke="#EEE" />' +
+                '<line x1="650" y1="' + cy + '" x2="750" y2="' + cy + '" stroke="#EEE" />' +
+                '<text class="stn" x=' + x + ' y=' + (y + 12 - 12) + ' fill=' + color + ' onclick=\'showTrainInfo(' + json + ');\'>' + data.stn.ja + '</text>' +
+                '<text class="stn" x=' + x + ' y=' + (y + 12 + 12) + ' fill=' + color + ' onclick=\'showTrainInfo(' + json + ');\'>' + data.stn.ko + '</text>' +
+                circle;
         }
     </script>
 </body>
