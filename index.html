@@ -130,8 +130,8 @@
             var cy = y;
             var circle = '<circle cx="' + (cx - 350) + '" cy="' + cy + '" r="9"/><circle cx="' + (cx + 350) + '" cy="' + cy + '" r="9"/>';
             var json = JSON.stringify(data);
-            return '<line x1="50" y1="' + cy + '" x2="150" y2="' + cy + '" stroke="#EEE" />' +
-                '<line x1="650" y1="' + cy + '" x2="750" y2="' + cy + '" stroke="#EEE" />' +
+            return '<line x1="50" y1="' + cy + '" x2="150" y2="' + cy + '" stroke="#BBB" />' +
+                '<line x1="650" y1="' + cy + '" x2="750" y2="' + cy + '" stroke="#BBB" />' +
                 '<text class="stn" x=' + x + ' y=' + (y - 6) + ' fill=' + color + ' onclick=\'showTrainInfo(' + json + ');\'>' + data.stn.ja + '</text>' +
                 '<text class="stn" x=' + x + ' y=' + (y + 22) + ' fill=' + color + ' onclick=\'showTrainInfo(' + json + ');\'>' + data.stn.ko + '</text>' +
                 circle;
