@@ -106,28 +106,28 @@
                 .then((response) => response.json())
                 .then((data) => {
                     alert(JSON.stringify(data, null, 4));
-                    applyData(data);
+                    applyData(data, lineId);
                 });
         }
 
         function applyData(data, lineId) {
-            var color = '#000';
             var src = '';
             src += drawLine(data);
             document.getElementById('metro_map').innerHTML = src;
         }
 
 
-        function drawLine(data, lineId) {
+        function drawLine(data, lineColor) {
+            lineColor = '#000';
             var m = 100;
             var height = m * data.length;
             var src = '<svg viewbox="0 -50 800 ' + height + '" >';
-            src += '<line x1="50" y1="-20" x2="50" y2="' + (height-80) + '" stroke="' + data.color + '" />';
-            src += '<line x1="750" y1="-20" x2="750" y2="' + (height-80) + '" stroke="' + data.color + '" />';
+            src += '<line x1="50" y1="-20" x2="50" y2="' + (height-80) + '" stroke="' + lineColor + '" />';
+            src += '<line x1="750" y1="-20" x2="750" y2="' + (height-80) + '" stroke="' + lineColor + '" />';
             data.forEach((e, i) => {
                 src += station(400, m*i, e);
-                // src += metro_up(50, m*i, e.up);
-                // src += metro_dn(750, m*i, e.down);
+                src += metro_up(50, m*i, e.up);
+                src += metro_dn(750, m*i, e.down);
             });
             
             src += '</svg>';
@@ -139,12 +139,80 @@
             var cy = y;
             var circle = '<circle cx="' + (cx - 350) + '" cy="' + cy + '" r="9"/><circle cx="' + (cx + 350) + '" cy="' + cy + '" r="9"/>';
             var json = JSON.stringify(data);
-            return '<line x1="50" y1="' + cy + '" x2="150" y2="' + cy + '" stroke="#BBB" />' +
-                '<line x1="650" y1="' + cy + '" x2="750" y2="' + cy + '" stroke="#BBB" />' +
+            return '<line x1="50" y1="' + cy + '" x2="150" y2="' + cy + '" stroke="#EEE" />' +
+                '<line x1="650" y1="' + cy + '" x2="750" y2="' + cy + '" stroke="#EEE" />' +
                 '<text class="stn" x=' + x + ' y=' + (y - 6) + ' fill=' + color + ' onclick=\'showTrainInfo(' + json + ');\'>' + data.stn.ja + '</text>' +
                 '<text class="stn" x=' + x + ' y=' + (y + 22) + ' fill=' + color + ' onclick=\'showTrainInfo(' + json + ');\'>' + data.stn.ko + '</text>' +
                 circle;
         }
+
+        function metro_up(x, y, data) {
+            if (data.length == 0) return '';
+            x -= 14;
+            y -= 24;
+            var result = "";
+            data.forEach((e, i) => { //열차 아이콘 배치
+                var px = x,
+                    py = y;
+                if (data.length > 1) {
+                    if (i == 0) px -= 6;
+                    else px += 6;
+                }
+                if (e.sts == '출발' || e.sts == '통과') py -= 30;
+                if (e.sts == '접근' || e.sts == '진입') py += 30;
+                var f = '';
+                if (e.type != null) f = '_rapid';
+                var file = "'./images/up" + f + ".svg'";
+                result += "<image xlink:href=" + file + " x='" + px + "' y='" + py + "' width='28px'/>";
+            });
+            // data.forEach((e, i) => { //행선지 글자 배치
+            //     var px = x,
+            //         py = y;
+            //     if (data.length > 1) {
+            //         if (i == 0) px -= 6;
+            //         else px += 6;
+            //     }
+            //     if (e.sts == '출발' || e.sts == '통과') py -= 30;
+            //     if (e.sts == '접근' || e.sts == '진입') py += 30;
+            //     result += terminal(e, px, py, 3);
+            // });
+            return result;
+        }
+
+        function metro_dn(x, y, data) {
+            if (data.length == 0) return '';
+            x -= 14;
+            y -= 24;
+            var result = "";
+            data.forEach((e, i) => { //열차 아이콘 배치
+                var px = x,
+                    py = y;
+                if (data.length > 1) {
+                    if (i == 0) px -= 6;
+                    else px += 6;
+                }
+                if (e.sts == '출발' || e.sts == '통과') py += 30;
+                if (e.sts == '접근' || e.sts == '진입') py -= 30;
+                var f = '';
+                if (e.type != null) f = '_rapid';
+                var file = "'./images/down" + f + ".svg'";
+                result += "<image xlink:href=" + file + " x='" + px + "' y='" + py + "' width='28px'/>";
+            });
+            // data.forEach((e, i) => { //행선지 글자 배치
+            //     var px = x,
+            //         py = y;
+            //     if (data.length > 1) {
+            //         if (i == 0) px -= 6;
+            //         else px += 6;
+            //     }
+            //     if (e.sts == '출발' || e.sts == '통과') py += 30;
+            //     if (e.sts == '접근' || e.sts == '진입') py -= 30;
+            //     result += terminal(e, px, py, 1);
+            // });
+            return result;
+        }
+
+
     </script>
 </body>
 
