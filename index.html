@@ -110,7 +110,7 @@
             fetch(url + '?lineId=' + lineId)
                 .then((response) => response.json())
                 .then((data) => {
-                    alert(JSON.stringify(data, null, 4));
+                    // alert(JSON.stringify(data, null, 4));
                     applyData(data, lineId);
                 });
         }
