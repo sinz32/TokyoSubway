@@ -56,6 +56,11 @@
         text-align: center;
     }
 
+    line {
+        stroke-width: 5px;
+        stroke-linejoin: round;
+        stroke-linecap: round;
+    }
     circle {
         fill: #FFF;
         stroke: #000;
@@ -111,14 +116,16 @@
         }
 
         function applyData(data, lineId) {
+            const lineColors = {
+                A: '#FF535F'
+            };
             var src = '';
-            src += drawLine(data);
+            src += drawLine(data, lineColors[lineId]);
             document.getElementById('metro_map').innerHTML = src;
         }
 
 
         function drawLine(data, lineColor) {
-            lineColor = '#000';
             var m = 100;
             var height = m * data.length;
             var src = '<svg viewbox="0 -50 800 ' + height + '" >';
