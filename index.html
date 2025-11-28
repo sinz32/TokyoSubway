@@ -40,6 +40,26 @@
         padding: 8px;
     }
 
+    div.drawer {
+        position: fixed;
+        top: 0;
+        margin: 64px 8px 8px;
+        background: #EEE;
+        height: 100%;
+        width: 0px;
+        position: fixed;
+        transition: 0.3s;
+        overflow-x: hidden;
+        box-shadow: 0px 20px 20px 0px rgba(0, 0, 0, 0.4);
+        z-index: 3;
+        white-space: nowrap;
+        font-size: 1.1rem;
+    }
+
+    div.line_list>div {
+        margin: 8px;
+    }
+
     div.body_outer {
         margin: 54px auto 0px;
         padding: 16px;
@@ -85,7 +105,23 @@
     </div>
 
     <!-- drawer -->
-    <div class='drawer' id='drawer'></div>
+    <div class='drawer' id='drawer'>
+        <div class='line_list'>
+            <div>아사쿠사선</div>
+            <div>히비아선</div>
+            <div>긴자선</div>
+            <div>마루노우치선</div>
+            <div>도자이선</div>
+            <div>미타선</div>
+            <div>난보쿠선</div>
+            <div>유라쿠초선</div>
+            <div>치요다선</div>
+            <div>신주쿠선</div>
+            <div>한조몬선</div>
+            <div>오에도선</div>
+            <div>후쿠토신선</div>
+        </div>
+    </div>
 
     <!-- body -->
     <div class='body_outer'>
@@ -232,7 +268,20 @@
             return result;
         }
 
+        var isOpened = false;
+        function openOrClose(btn){
+            isOpened ? closeDrawer() : openDrawer();
+        }
 
+        function openDrawer() {
+            document.getElementById("drawer").style.width = "60%";
+            isOpened = true;
+        }
+
+        function closeDrawer() {
+            document.getElementById("drawer").style.width = "0";
+            isOpened = false;
+        }
     </script>
 </body>
 
