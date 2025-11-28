@@ -107,19 +107,19 @@
     <!-- drawer -->
     <div class='drawer' id='drawer'>
         <div class='line_list'>
-            <div>아사쿠사선</div>
-            <div>히비아선</div>
-            <div>긴자선</div>
-            <div>마루노우치선</div>
-            <div>도자이선</div>
-            <div>미타선</div>
-            <div>난보쿠선</div>
-            <div>유라쿠초선</div>
-            <div>치요다선</div>
-            <div>신주쿠선</div>
-            <div>한조몬선</div>
-            <div>오에도선</div>
-            <div>후쿠토신선</div>
+            <div onclick='loadData("A");'>아사쿠사선</div>
+            <div onclick='loadData("H");'>히비아선</div>
+            <div onclick='loadData("G");'>긴자선</div>
+            <div onclick='loadData("M");'>마루노우치선</div>
+            <div onclick='loadData("T");'>도자이선</div>
+            <div onclick='loadData("I");'>미타선</div>
+            <div onclick='loadData("N");'>난보쿠선</div>
+            <div onclick='loadData("Y");'>유라쿠초선</div>
+            <div onclick='loadData("C");'>치요다선</div>
+            <div onclick='loadData("S");'>신주쿠선</div>
+            <div onclick='loadData("Z");'>한조몬선</div>
+            <div onclick='loadData("E");'>오에도선</div>
+            <div onclick='loadData("F");'>후쿠토신선</div>
         </div>
     </div>
 
@@ -139,15 +139,14 @@
     </div>
 
     <script>
-        loadData('A');
-
-        function loadData(lineId) {
+        function loadData(lineId, noClose) {
             var url = 'htt'+'ps://me'+'tro.si'+'nz.me/tokyo/api';
             fetch(url + '?lineId=' + lineId)
                 .then((response) => response.json())
                 .then((data) => {
                     // alert(JSON.stringify(data, null, 4));
                     applyData(data, lineId);
+                    if (!noClose) closeDrawer();
                 });
         }
 
