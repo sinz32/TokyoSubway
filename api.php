@@ -201,11 +201,14 @@ if ($lineId == 'A' || $lineId == 'I' || $lineId == 'S' || $lineId == 'E') {
         );
         for($m=0;$m<count($trains);$m++){
             if ($stn_list[$n] == $trains[$m]['stn']) {
-                $result[$n][$trains[$m]['dir']][] = array(
+                $datum = array(
                     'no' => $trains[$m]['no'],
-                    'terminal' => $trains[$m]['terminal'],
-                    'type' => $trains[$m]['type']
+                    'terminal' => $trains[$m]['terminal']
                 );
+                if ($trains[$m]['type'] != '보통') {
+                    $datum['type'] = $trains[$m]['type'];
+                }
+                $result[$n][$trains[$m]['dir']][] = $datum;
             }
         }
     }
