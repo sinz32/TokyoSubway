@@ -178,11 +178,13 @@ if ($lineId == 'A' || $lineId == 'I' || $lineId == 'S' || $lineId == 'E') {
         }
 
         //운행 중인 열차 목록에 열차 추가
+        $dir = $data[$n]['dir'];
+        if ($dir == 'dn') $dir = 'down';
         $trains[] = array(
             'no' => $data[$n]['no'],
             'terminal' => $data[$n]['terminal'],
             'type' => $data[$n]['type'],
-            'dir' => $data[$n]['dir'],
+            'dir' => $dir,
             'stn' => $stn
         );
     }
