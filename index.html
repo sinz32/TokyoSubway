@@ -43,7 +43,7 @@
     div.drawer {
         position: fixed;
         top: 0;
-        margin: 64px 8px 8px;
+        padding: 64px 0px 0px;
         background: #EEE;
         height: 100%;
         width: 0px;
@@ -56,8 +56,12 @@
         font-size: 1.1rem;
     }
 
+    div.drawer>div {
+        padding: 4px;
+    }
+
     div.line_list>div {
-        margin: 8px;
+        margin: 12px;
     }
 
     div.body_outer {
@@ -76,7 +80,7 @@
         text-align: center;
     }
 
-    line {
+    line, polyline {
         stroke-width: 5px;
         stroke-linejoin: round;
         stroke-linecap: round;
@@ -93,6 +97,14 @@
         text-anchor: middle;
         font-size: 22px;
     }
+    text.stn_l {
+        text-anchor: start;
+        font-size: 22px;
+    }
+    text.stn_r {
+        text-anchor: end;
+        font-size: 22px;
+    }
 </style>
 
 <body>
@@ -106,7 +118,7 @@
 
     <!-- drawer -->
     <div class='drawer' id='drawer'>
-        <div class='line_list'>
+        <div><div class='line_list'>
             <div onclick='loadData("A");'>아사쿠사선</div>
             <div onclick='loadData("H");'>히비아선</div>
             <div onclick='loadData("G");'>긴자선</div>
@@ -120,7 +132,7 @@
             <div onclick='loadData("Z");'>한조몬선</div>
             <div onclick='loadData("E");'>오에도선</div>
             <div onclick='loadData("F");'>후쿠토신선</div>
-        </div>
+        </div></div>
     </div>
 
     <!-- body -->
@@ -168,10 +180,10 @@
 
             };
             var src = '';
-            src += drawLine(data, lineColors[lineId]);
+            if (lineId == 'E') src += drawOedoLine(data, lineColors[lineId]);
+            else src += drawLine(data, lineColors[lineId]);
             document.getElementById('metro_map').innerHTML = src;
         }
-
 
         function drawLine(data, lineColor) {
             var m = 100;
@@ -189,6 +201,42 @@
             return src;
         }
 
+        function drawOedoLine(data, lineColor) {
+            var m = 100;
+            var height = m * data.length;
+            var src = '<svg viewbox="0 -50 800 ' + height + '" >';
+            src += '<polyline points="50,-20 50,2650 150,2750 650,2750 750,2650 750,1300 650,1200 150,1200 100,1150" fill="none" stroke="'+lineColor+'" />';
+            src += '<polyline points="750,-20 750,950 700,1000 150,1000 100,1050 100,2650 150,2700 650,2700 700,2650 700,1300 650,1250 200,1250 100,1250 50,1200 50,1150" fill="none" stroke="'+lineColor+'" />';
+            src += '<line x1="50" y1="1070" x2="100" y2="1130" stroke="' + lineColor + '" />';
+            src += '<line x1="100" y1="1070" x2="50" y2="1130" stroke="' + lineColor + '" />';
+            var py = data.length - 1;
+            for(var n=29;n<data.length;n++){
+                src += station(400, m*(py - n), data[n]);
+                src += metro_up(50, m*(py - n), data[n].down);
+                src += metro_dn(750, m*(py - n), data[n].up);
+            }
+            
+            src += stationL(200, 1100, data[0]);
+            src += metro_up(50, 1100, data[0].down);
+            src += metro_dn(100, 1100, data[0].up);
+
+            py = data.length + 1;
+            for(var n=14;n<28;n++){
+                src += stationL(200, m*(py - n), data[n], false, '#000000', true);
+                src += metro_dn(100, m*(py - n), data[n].up);
+                src += metro_up(50, m*(py - n), data[n].down);
+            }
+            py = 13;
+            for(var n=1;n<14;n++){
+                src += stationR(600, m*(n + py), data[n], true, '#000000', true);
+                src += metro_up(700, m*(n + py), data[n].up, true);
+                src += metro_dn(750, m*(n + py), data[n].down, true);
+            }
+            
+            src += '</svg>';
+            return src;
+        }
+
         function station(x, y, data, color) {
             var cx = x;
             var cy = y;
@@ -200,6 +248,40 @@
                 '<text class="stn" x=' + x + ' y=' + (y + 22) + ' fill=' + color + ' onclick=\'showTrainInfo(' + json + ');\'>' + data.stn.ko + '</text>' +
                 circle;
         }
+
+        function stationD(x, y, data, color) {
+            var cx = x;
+            var cy = y;
+            var circle = '<circle cx="50" cy="' + cy + '" r="9"/><circle cx="150" cy="' + cy + '" r="9"/>';
+            var json = JSON.stringify(data);
+            return '<line x1="50" y1="' + cy + '" x2="200" y2="' + cy + '" stroke="#EEE" />' +
+                '<text class="stn_l" x=' + x + ' y=' + (y - 6) + ' fill=' + color + ' onclick=\'showTrainInfo(' + json + ');\'>' + data.stn.ja + '</text>' +
+                '<text class="stn_l" x=' + x + ' y=' + (y + 22) + ' fill=' + color + ' onclick=\'showTrainInfo(' + json + ');\'>' + data.stn.ko + '</text>' +
+                circle;
+        }
+
+        function stationL(x, y, data, color) {
+            var cx = x;
+            var cy = y;
+            var circle = '<circle cx="50" cy="' + cy + '" r="9"/><circle cx="100" cy="' + cy + '" r="9"/>';
+            var json = JSON.stringify(data);
+            return '<line x1="50" y1="' + cy + '" x2="150" y2="' + cy + '" stroke="#EEE" />' +
+                '<text class="stn_l" x=' + x + ' y=' + (y - 6) + ' fill=' + color + ' onclick=\'showTrainInfo(' + json + ');\'>' + data.stn.ja + '</text>' +
+                '<text class="stn_l" x=' + x + ' y=' + (y + 22) + ' fill=' + color + ' onclick=\'showTrainInfo(' + json + ');\'>' + data.stn.ko + '</text>' +
+                circle;
+        }
+
+        function stationR(x, y, data, color) {
+            var cx = x;
+            var cy = y;
+            var circle = '<circle cx="750" cy="' + cy + '" r="9"/><circle cx="700" cy="' + cy + '" r="9"/>';
+            var json = JSON.stringify(data);
+            return '<line x1="650" y1="' + cy + '" x2="750" y2="' + cy + '" stroke="#EEE" />' +
+                '<text class="stn_r" x=' + x + ' y=' + (y - 6) + ' fill=' + color + ' onclick=\'showTrainInfo(' + json + ');\'>' + data.stn.ja + '</text>' +
+                '<text class="stn_r" x=' + x + ' y=' + (y + 22) + ' fill=' + color + ' onclick=\'showTrainInfo(' + json + ');\'>' + data.stn.ko + '</text>' +
+                circle;
+        }
+
 
         function metro_up(x, y, data) {
             if (data.length == 0) return '';
