@@ -180,7 +180,8 @@
 
             };
             var src = '';
-            if (lineId == 'E') src += drawOedoLine(data, lineColors[lineId]);
+            if (lineId == 'M') src += drawMarunouchiLine(data, lineColors[lineId]);
+            else if (lineId == 'E') src += drawOedoLine(data, lineColors[lineId]);
             else src += drawLine(data, lineColors[lineId]);
             document.getElementById('metro_map').innerHTML = src;
         }
@@ -197,6 +198,37 @@
                 src += metro_dn(750, m*i, e.down);
             });
             
+            src += '</svg>';
+            return src;
+        }
+
+        function drawMarunouchiLine(data, lineColor) {
+            var m = 100;
+            var height = m * data.length;
+            var src = '<svg viewbox="0 -50 800 ' + height + '" >';
+            src += '<line x1="50" y1="-20" x2="50" y2="' + (height-80) + '" stroke="' + lineColor + '" />';
+            src += '<line x1="750" y1="-20" x2="750" y2="' + (height-80) + '" stroke="' + lineColor + '" />';
+            src += '<polyline points="100,480 100,750 50,800" fill="none" stroke="'+lineColor+'" />';
+            src += '<polyline points="700,480 700,750 750,800" fill="none" stroke="'+lineColor+'" />';
+          
+            for(var n=0;n<5;n++){
+                src += station(400, m*n, data[n]);
+                src += metro_up(50, m*n, data[n].up);
+                src += metro_dn(750, m*n, data[n].down);
+            }
+            for(var n=5;n<25;n++){
+                src += station(400, m*(n+3), data[n]);
+                src += metro_up(50, m*(n+3), data[n].up);
+                src += metro_dn(750, m*(n+3), data[n].down);
+            }
+        
+            
+            var size = data.length - 1;
+            for(var n=size;n>=25;n--){
+                src += stationI(400, m*(size-n+5), data[n], false, null, false, true);
+                src += metro_up(100, m*(size-n+5), data[n].up);
+                src += metro_dn(700, m*(size-n+5), data[n].down);
+            }
             src += '</svg>';
             return src;
         }
@@ -244,6 +276,18 @@
             var json = JSON.stringify(data);
             return '<line x1="50" y1="' + cy + '" x2="150" y2="' + cy + '" stroke="#EEE" />' +
                 '<line x1="650" y1="' + cy + '" x2="750" y2="' + cy + '" stroke="#EEE" />' +
+                '<text class="stn" x=' + x + ' y=' + (y - 6) + ' fill=' + color + ' onclick=\'showTrainInfo(' + json + ');\'>' + data.stn.ja + '</text>' +
+                '<text class="stn" x=' + x + ' y=' + (y + 22) + ' fill=' + color + ' onclick=\'showTrainInfo(' + json + ');\'>' + data.stn.ko + '</text>' +
+                circle;
+        }
+
+        function stationI(x, y, data, color) {
+            var cx = x;
+            var cy = y;
+            var circle = '<circle cx="100" cy="' + cy + '" r="9"/><circle cx="700" cy="' + cy + '" r="9"/>';
+            var json = JSON.stringify(data);
+            return '<line x1="100" y1="' + cy + '" x2="200" y2="' + cy + '" stroke="#EEE" />' +
+                '<line x1="600" y1="' + cy + '" x2="700" y2="' + cy + '" stroke="#EEE" />' +
                 '<text class="stn" x=' + x + ' y=' + (y - 6) + ' fill=' + color + ' onclick=\'showTrainInfo(' + json + ');\'>' + data.stn.ja + '</text>' +
                 '<text class="stn" x=' + x + ' y=' + (y + 22) + ' fill=' + color + ' onclick=\'showTrainInfo(' + json + ');\'>' + data.stn.ko + '</text>' +
                 circle;
