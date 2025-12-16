@@ -55,7 +55,8 @@ $terminals = array(
     'Shiodome' => '시오도메',
     'Ojima' => '오지마',
     'Wakabadai' => '와카다바이',
-    'ShinOkachimachi' => '신오카치마치'
+    'ShinOkachimachi' => '신오카치마치',
+    'KiyosumiShirakawa' => '키요스미시라카와'
 
 )
 
