@@ -333,8 +333,7 @@
             y -= 24;
             var result = "";
             data.forEach((e, i) => { //열차 아이콘 배치
-                var px = x,
-                    py = y;
+                var px = x, py = y;
                 if (data.length > 1) {
                     if (i == 0) px -= 6;
                     else px += 6;
@@ -346,16 +345,17 @@
                 var file = "'./images/up" + f + ".svg'";
                 result += "<image xlink:href=" + file + " x='" + px + "' y='" + py + "' width='28px'/>";
             });
-            // data.forEach((e, i) => { //행선지 글자 배치
-            //     var px = x, py = y;
-            //     if (data.length > 1) {
-            //         if (i == 0) px -= 6;
-            //         else px += 6;
-            //     }
-            //     if (e.sts == '출발' || e.sts == '통과') py -= 30;
-            //     if (e.sts == '접근' || e.sts == '진입') py += 30;
-            //     result += terminal(e, px, py, 3);
-            // });
+            data.forEach((e, i) => { //행선지 글자 배치
+                var px = x,
+                    py = y;
+                if (data.length > 1) {
+                    if (i == 0) px -= 6;
+                    else px += 6;
+                }
+                if (e.sts == '출발' || e.sts == '통과') py -= 30;
+                if (e.sts == '접근' || e.sts == '진입') py += 30;
+                result += terminal(e, px, py, 3);
+            });
             return result;
         }
 
@@ -365,8 +365,7 @@
             y -= 24;
             var result = "";
             data.forEach((e, i) => { //열차 아이콘 배치
-                var px = x,
-                    py = y;
+                var px = x, py = y;
                 if (data.length > 1) {
                     if (i == 0) px -= 6;
                     else px += 6;
@@ -378,17 +377,41 @@
                 var file = "'./images/down" + f + ".svg'";
                 result += "<image xlink:href=" + file + " x='" + px + "' y='" + py + "' width='28px'/>";
             });
-            // data.forEach((e, i) => { //행선지 글자 배치
-            //     var px = x, py = y;
-            //     if (data.length > 1) {
-            //         if (i == 0) px -= 6;
-            //         else px += 6;
-            //     }
-            //     if (e.sts == '출발' || e.sts == '통과') py += 30;
-            //     if (e.sts == '접근' || e.sts == '진입') py -= 30;
-            //     result += terminal(e, px, py, 1);
-            // });
+            data.forEach((e, i) => { //행선지 글자 배치
+                var px = x, py = y;
+                if (data.length > 1) {
+                    if (i == 0) px -= 6;
+                    else px += 6;
+                }
+                if (e.sts == '출발' || e.sts == '통과') py += 30;
+                if (e.sts == '접근' || e.sts == '진입') py -= 30;
+                result += terminal(e, px, py, 1);
+            });
             return result;
+        }
+        
+        function terminal(e, x, y, dy) {
+            if (e.terminal == null) return '';
+            var terminal = e.terminal;
+            if (e.terminal.includes('(')) terminal = e.terminal.split('(')[0].trim();
+            x += 5;
+            y += 30 + dy;
+
+            if (terminal == '내선순환') terminal = '내선';
+            else if (terminal == '외선순환') terminal = '외선';
+            else if (terminal.length > 3) terminal = e.terminal.slice(0, 2) + '︙';
+            switch(terminal.length) {
+                case 1:
+                    return '<text class=terminal x='+x+' y='+y+' fill=#E0E0E0>'+terminal+'</text>';
+                case 2:
+                    return '<text class=terminal x='+x+' y='+(y-9)+' fill=#E0E0E0>'+terminal[0]+'</text>'
+                        + '<text class=terminal x='+x+' y='+(y+9)+' fill=#E0E0E0>'+terminal[1]+'</text>';
+                case 3:
+                    return '<text class=terminal x='+x+' y='+(y-17)+' fill=#E0E0E0>'+terminal[0]+'</text>'
+                        + '<text class=terminal x='+x+' y='+y+' fill=#E0E0E0>'+terminal[1]+'</text>'
+                        + '<text class=terminal x='+x+' y='+(y+17)+' fill=#E0E0E0>'+terminal[2]+'</text>';
+            }
+            return '';
         }
 
         var isOpened = false;
