@@ -112,7 +112,7 @@
 	<link href="https://hangeul.pstatic.net/hangeul_static/css/nanum-barun-gothic.css" rel="stylesheet">
 
     <!-- title -->
-    <div class='title'>
+    <div class='title' id='title'>
         <i class="material-icons" id='icon' onclick="openOrClose();">&#xE5D2;</i><span id='title_text'>도쿄 지하철 실시간 위치</span>
     </div>
 
@@ -136,7 +136,7 @@
     </div>
 
     <!-- body -->
-    <div class='body_outer'>
+    <div class='body_outer' id='body_outer'>
         <div class='body'>
             <div id='metro_map'>
                 상단 왼쪽에 있는 버튼을 눌러서 노선을 선택하세요.
@@ -427,6 +427,16 @@
         function closeDrawer() {
             document.getElementById("drawer").style.width = "0";
             isOpened = false;
+        }
+
+
+        if(navigator.userAgent.includes('AndroidApp')) {
+            hideTitle();
+        }
+
+        function hideTitle() {
+            document.getElementById('title').style.display = 'none';
+            document.getElementById('body_outer').style.marginTop = '0px';
         }
     </script>
 </body>
