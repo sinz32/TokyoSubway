@@ -27,7 +27,7 @@ public class MainActivity extends Activity {
         web.loadUrl("안알랴줌");
         WebSettings settings = web.getSettings();
         settings.setJavaScriptEnabled(true);
-        settings.setUserAgentString(settings.getUserAgentString()+" AndroidApp/1.0");
+        settings.setUserAgentString(settings.getUserAgentString()+" SinZMetro/1.0J");
         web.setLayoutParams(new LinearLayout.LayoutParams(-1, -1));
         layout.addView(web);
         layout.setLayoutParams(new LinearLayout.LayoutParams(-1, -1));
