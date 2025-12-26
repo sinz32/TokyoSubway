@@ -47,7 +47,7 @@ public class MainActivity extends Activity {
         setContentView(drawer);
 
         getActionBar().setDisplayHomeAsUpEnabled(true);
-        getActionBar().setHomeAsUpIndicator(android.R.drawable.menu_full_frame);
+        getActionBar().setHomeAsUpIndicator(R.drawable.ic_drawer);
     }
 
     private LinearLayout createLeftDrawer(WebView web) {
