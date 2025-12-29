@@ -77,6 +77,15 @@ public class MainActivity extends Activity {
         return layout;
     }
 
+    @Override
+    public void onBackPressed() {
+        if (drawer.isDrawerOpen(Gravity.LEFT)) {
+            drawer.closeDrawer(Gravity.LEFT);
+        } else {
+            super.onBackPressed();
+        }
+    }
+
     private int dip2px(int dips) {
         return (int) Math.ceil(dips * this.getResources().getDisplayMetrics().density);
     }
