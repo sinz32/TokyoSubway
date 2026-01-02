@@ -1,5 +1,5 @@
 # 도쿄 지하철 운행 정보
-© 2023-2025 SinZ, All rights reserved.
+© 2023-2026 SinZ, All rights reserved.
 
 # 지원하는 노선 목록
 
