@@ -36,6 +36,8 @@ public class MainActivity extends Activity {
         web.loadUrl("안알랴줌");
         WebSettings settings = web.getSettings();
         settings.setJavaScriptEnabled(true);
+        settings.setBuiltInZoomControls(true);
+        settings.setDisplayZoomControls(false);
         settings.setUserAgentString(settings.getUserAgentString()+" SinZMetro/1.0J");
         web.setLayoutParams(new LinearLayout.LayoutParams(-1, -1));
         layout.addView(web);
@@ -58,7 +60,7 @@ public class MainActivity extends Activity {
         final String[] lineIds = {"A", "H", "G", "M", "T", "I", "N", "Y", "C", "S", "Z", "E", "F"};
 
         ListView list = new ListView(this);
-        list.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, lines));
+        list.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, lines));
         list.setOnItemClickListener((adapterView, view, pos, id) -> {
             if (pos < lineIds.length) {
                 web.loadUrl("javascript:loadData('" + lineIds[pos] + "');");
