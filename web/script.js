@@ -1,0 +1,261 @@
+function loadData(lineId, noClose) {
+    var url = 'htt'+'ps://me'+'tro.si'+'nz.me/tokyo/api';
+    fetch(url + '?lineId=' + lineId)
+        .then((response) => response.json())
+        .then((data) => {
+            applyData(data, lineId);
+            if (!noClose) closeDrawer();
+        });
+}
+
+function applyData(data, lineId) {
+    const lineColors = {
+        A: '#FF535F',
+        H: '#B5B5AC',
+        G: '#FF9500',
+        M: '#F62E36',
+        T: '#009BBF',
+        I: '#0067B0',
+        N: '#00AC9B',
+        Y: '#C1A470',
+        C: '#00BB85',
+        S: '#9FB01C',
+        Z: '#8F76D6',
+        E: '#CF3366',
+        F: '#9C5E31'
+
+    };
+    var src = '';
+    if (lineId == 'M') src += drawMarunouchiLine(data, lineColors[lineId]);
+    else if (lineId == 'E') src += drawOedoLine(data, lineColors[lineId]);
+    else src += drawLine(data, lineColors[lineId]);
+    document.getElementById('metro_map').innerHTML = src;
+}
+
+function drawLine(data, lineColor) {
+    var m = 100;
+    var height = m * data.length;
+    var src = '<svg viewbox="0 -50 800 ' + height + '" >';
+    src += '<line x1="50" y1="-20" x2="50" y2="' + (height-80) + '" stroke="' + lineColor + '" />';
+    src += '<line x1="750" y1="-20" x2="750" y2="' + (height-80) + '" stroke="' + lineColor + '" />';
+    data.forEach((e, i) => {
+        src += station(400, m*i, e);
+        src += metro_up(50, m*i, e.up);
+        src += metro_dn(750, m*i, e.down);
+    });
+    
+    src += '</svg>';
+    return src;
+}
+
+function drawMarunouchiLine(data, lineColor) {
+    var m = 100;
+    var height = m * data.length;
+    var src = '<svg viewbox="0 -50 800 ' + height + '" >';
+    src += '<line x1="50" y1="-20" x2="50" y2="' + (height-80) + '" stroke="' + lineColor + '" />';
+    src += '<line x1="750" y1="-20" x2="750" y2="' + (height-80) + '" stroke="' + lineColor + '" />';
+    src += '<polyline points="100,480 100,750 50,800" fill="none" stroke="'+lineColor+'" />';
+    src += '<polyline points="700,480 700,750 750,800" fill="none" stroke="'+lineColor+'" />';
+  
+    for(var n=0;n<5;n++){
+        src += station(400, m*n, data[n]);
+        src += metro_up(50, m*n, data[n].up);
+        src += metro_dn(750, m*n, data[n].down);
+    }
+    for(var n=5;n<25;n++){
+        src += station(400, m*(n+3), data[n]);
+        src += metro_up(50, m*(n+3), data[n].up);
+        src += metro_dn(750, m*(n+3), data[n].down);
+    }
+
+    
+    var size = data.length - 1;
+    for(var n=size;n>=25;n--){
+        src += stationI(400, m*(size-n+5), data[n], false, null, false, true);
+        src += metro_up(100, m*(size-n+5), data[n].up);
+        src += metro_dn(700, m*(size-n+5), data[n].down);
+    }
+    src += '</svg>';
+    return src;
+}
+
+function drawOedoLine(data, lineColor) {
+    var m = 100;
+    var height = m * data.length;
+    var src = '<svg viewbox="0 -50 800 2820" >';
+    src += '<polyline points="50,-20 50,2650 150,2750 650,2750 750,2650 750,1300 650,1200 150,1200 100,1150" fill="none" stroke="'+lineColor+'" />';
+    src += '<polyline points="750,-20 750,950 700,1000 150,1000 100,1050 100,2650 150,2700 650,2700 700,2650 700,1300 650,1250 200,1250 100,1250 50,1200 50,1150" fill="none" stroke="'+lineColor+'" />';
+    src += '<line x1="50" y1="1070" x2="100" y2="1130" stroke="' + lineColor + '" />';
+    src += '<line x1="100" y1="1070" x2="50" y2="1130" stroke="' + lineColor + '" />';
+    var py = data.length - 1;
+    for(var n=29;n<data.length;n++){
+        src += station(400, m*(py - n), data[n]);
+        src += metro_up(50, m*(py - n), data[n].down);
+        src += metro_dn(750, m*(py - n), data[n].up);
+    }
+    
+    src += stationL(200, 1100, data[0]);
+    src += metro_up(50, 1100, data[0].down);
+    src += metro_dn(100, 1100, data[0].up);
+
+    py = data.length + 1;
+    for(var n=14;n<28;n++){
+        src += stationL(200, m*(py - n), data[n], false, '#000000', true);
+        src += metro_dn(100, m*(py - n), data[n].up);
+        src += metro_up(50, m*(py - n), data[n].down);
+    }
+    py = 13;
+    for(var n=1;n<14;n++){
+        src += stationR(600, m*(n + py), data[n], true, '#000000', true);
+        src += metro_up(700, m*(n + py), data[n].up, true);
+        src += metro_dn(750, m*(n + py), data[n].down, true);
+    }
+    
+    src += '</svg>';
+    return src;
+}
+
+function station(x, y, data, color) {
+    var cx = x;
+    var cy = y;
+    var circle = '<circle cx="' + (cx - 350) + '" cy="' + cy + '" r="9"/><circle cx="' + (cx + 350) + '" cy="' + cy + '" r="9"/>';
+    var json = JSON.stringify(data);
+    return '<line x1="50" y1="' + cy + '" x2="150" y2="' + cy + '" stroke="#EEE" />' +
+        '<line x1="650" y1="' + cy + '" x2="750" y2="' + cy + '" stroke="#EEE" />' +
+        '<text class="stn" x=' + x + ' y=' + (y - 8) + ' fill=' + color + ' onclick=\'showTrainInfo(' + json + ');\'>' + data.stn.ja + '</text>' +
+        '<text class="stn" x=' + x + ' y=' + (y + 24) + ' fill=' + color + ' onclick=\'showTrainInfo(' + json + ');\'>' + data.stn.ko + '</text>' +
+        circle;
+}
+
+function stationI(x, y, data, color) {
+    var cx = x;
+    var cy = y;
+    var circle = '<circle cx="100" cy="' + cy + '" r="9"/><circle cx="700" cy="' + cy + '" r="9"/>';
+    var json = JSON.stringify(data);
+    return '<line x1="100" y1="' + cy + '" x2="200" y2="' + cy + '" stroke="#EEE" />' +
+        '<line x1="600" y1="' + cy + '" x2="700" y2="' + cy + '" stroke="#EEE" />' +
+        '<text class="stn" x=' + x + ' y=' + (y - 8) + ' fill=' + color + ' onclick=\'showTrainInfo(' + json + ');\'>' + data.stn.ja + '</text>' +
+        '<text class="stn" x=' + x + ' y=' + (y + 24) + ' fill=' + color + ' onclick=\'showTrainInfo(' + json + ');\'>' + data.stn.ko + '</text>' +
+        circle;
+}
+
+function stationD(x, y, data, color) {
+    var cx = x;
+    var cy = y;
+    var circle = '<circle cx="50" cy="' + cy + '" r="9"/><circle cx="150" cy="' + cy + '" r="9"/>';
+    var json = JSON.stringify(data);
+    return '<line x1="50" y1="' + cy + '" x2="200" y2="' + cy + '" stroke="#EEE" />' +
+        '<text class="stn_l" x=' + x + ' y=' + (y - 8) + ' fill=' + color + ' onclick=\'showTrainInfo(' + json + ');\'>' + data.stn.ja + '</text>' +
+        '<text class="stn_l" x=' + x + ' y=' + (y + 24) + ' fill=' + color + ' onclick=\'showTrainInfo(' + json + ');\'>' + data.stn.ko + '</text>' +
+        circle;
+}
+
+function stationL(x, y, data, color) {
+    var cx = x;
+    var cy = y;
+    var circle = '<circle cx="50" cy="' + cy + '" r="9"/><circle cx="100" cy="' + cy + '" r="9"/>';
+    var json = JSON.stringify(data);
+    return '<line x1="50" y1="' + cy + '" x2="150" y2="' + cy + '" stroke="#EEE" />' +
+        '<text class="stn_l" x=' + (x-10) + ' y=' + (y - 8) + ' fill=' + color + ' onclick=\'showTrainInfo(' + json + ');\'>' + data.stn.ja + '</text>' +
+        '<text class="stn_l" x=' + (x-10) + ' y=' + (y + 24) + ' fill=' + color + ' onclick=\'showTrainInfo(' + json + ');\'>' + data.stn.ko + '</text>' +
+        circle;
+}
+
+function stationR(x, y, data, color) {
+    var cx = x;
+    var cy = y;
+    var circle = '<circle cx="750" cy="' + cy + '" r="9"/><circle cx="700" cy="' + cy + '" r="9"/>';
+    var json = JSON.stringify(data);
+    return '<line x1="650" y1="' + cy + '" x2="750" y2="' + cy + '" stroke="#EEE" />' +
+        '<text class="stn_r" x=' + (x+10) + ' y=' + (y - 8) + ' fill=' + color + ' onclick=\'showTrainInfo(' + json + ');\'>' + data.stn.ja + '</text>' +
+        '<text class="stn_r" x=' + (x+10) + ' y=' + (y + 24) + ' fill=' + color + ' onclick=\'showTrainInfo(' + json + ');\'>' + data.stn.ko + '</text>' +
+        circle;
+}
+
+
+function metro_up(x, y, data) {
+    if (data.length == 0) return '';
+    x -= 14;
+    y -= 24;
+    var result = "";
+    data.forEach((e, i) => { //열차 아이콘 배치
+        var px = x, py = y;
+        if (data.length > 1) {
+            if (i == 0) px -= 6;
+            else px += 6;
+        }
+        if (e.sts == '출발' || e.sts == '통과') py -= 30;
+        if (e.sts == '접근' || e.sts == '진입') py += 30;
+        var f = '';
+        if (e.type != null && e.type != '보통') f = '_rapid';
+        var file = "'./images/up" + f + ".svg'";
+        result += "<image xlink:href=" + file + " x='" + px + "' y='" + py + "' width='28px'/>";
+    });
+    data.forEach((e, i) => { //행선지 글자 배치
+        var px = x,
+            py = y;
+        if (data.length > 1) {
+            if (i == 0) px -= 6;
+            else px += 6;
+        }
+        if (e.sts == '출발' || e.sts == '통과') py -= 30;
+        if (e.sts == '접근' || e.sts == '진입') py += 30;
+        result += terminal(e, px, py, 3);
+    });
+    return result;
+}
+
+function metro_dn(x, y, data) {
+    if (data.length == 0) return '';
+    x -= 14;
+    y -= 24;
+    var result = "";
+    data.forEach((e, i) => { //열차 아이콘 배치
+        var px = x, py = y;
+        if (data.length > 1) {
+            if (i == 0) px -= 6;
+            else px += 6;
+        }
+        if (e.sts == '출발' || e.sts == '통과') py += 30;
+        if (e.sts == '접근' || e.sts == '진입') py -= 30;
+        var f = '';
+        if (e.type != null && e.type != '보통') f = '_rapid';
+        var file = "'./images/down" + f + ".svg'";
+        result += "<image xlink:href=" + file + " x='" + px + "' y='" + py + "' width='28px'/>";
+    });
+    data.forEach((e, i) => { //행선지 글자 배치
+        var px = x, py = y;
+        if (data.length > 1) {
+            if (i == 0) px -= 6;
+            else px += 6;
+        }
+        if (e.sts == '출발' || e.sts == '통과') py += 30;
+        if (e.sts == '접근' || e.sts == '진입') py -= 30;
+        result += terminal(e, px, py, 1);
+    });
+    return result;
+}
+
+function terminal(e, x, y, dy) {
+    if (e.terminal == null) return '';
+    var terminal = e.terminal;
+    if (e.terminal.includes('(')) terminal = e.terminal.split('(')[0].trim();
+    x += 5;
+    y += 30 + dy;
+
+    if (terminal == '내선순환') terminal = '내선';
+    else if (terminal == '외선순환') terminal = '외선';
+    else if (terminal.length > 3) terminal = e.terminal.slice(0, 2) + '︙';
+    switch(terminal.length) {
+        case 1:
+            return '<text class=terminal x='+x+' y='+y+' fill=#E0E0E0>'+terminal+'</text>';
+        case 2:
+            return '<text class=terminal x='+x+' y='+(y-9)+' fill=#E0E0E0>'+terminal[0]+'</text>'
+                + '<text class=terminal x='+x+' y='+(y+9)+' fill=#E0E0E0>'+terminal[1]+'</text>';
+        case 3:
+            return '<text class=terminal x='+x+' y='+(y-17)+' fill=#E0E0E0>'+terminal[0]+'</text>'
+                + '<text class=terminal x='+x+' y='+y+' fill=#E0E0E0>'+terminal[1]+'</text>'
+                + '<text class=terminal x='+x+' y='+(y+17)+' fill=#E0E0E0>'+terminal[2]+'</text>';
+    }
+    return '';
+}

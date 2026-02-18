@@ -1,0 +1,97 @@
+html {
+    font-size: 20px;
+    font-family: NanumBarunGothicLight;
+}
+
+body {
+    margin: 0px;
+}
+
+div.title {
+    position: fixed;
+    padding: 8px;
+    top: 0;
+    width: 100%;
+    z-index: 4;
+    font-size: 1.rem;
+    font-weight: bold;
+    color: #FFF;
+    background-color: #000;
+    display: flex;
+    align-items: center;
+    box-shadow: 0px 4px 5px 0px rgba(0, 0, 0, 0.3);
+}
+
+div.title>i {
+    padding: 8px;
+}
+
+div.title>span {
+    padding: 8px;
+}
+
+div.drawer {
+    position: fixed;
+    top: 0;
+    padding: 64px 0px 0px;
+    background: #EEE;
+    height: 100%;
+    width: 0px;
+    position: fixed;
+    transition: 0.3s;
+    overflow-x: hidden;
+    box-shadow: 0px 20px 20px 0px rgba(0, 0, 0, 0.4);
+    z-index: 3;
+    white-space: nowrap;
+    font-size: 1.1rem;
+}
+
+div.drawer>div {
+    padding: 4px;
+}
+
+div.line_list>div {
+    margin: 12px;
+}
+
+div.body_outer {
+    margin: 64px auto 0px;
+    padding: 4px;
+    max-width: 768px;
+}
+
+div.body {
+    padding: 8px;
+}
+
+div.footer {
+    padding: 8px;
+    font-size: 0.7rem;
+    text-align: center;
+}
+
+line, polyline {
+    stroke-width: 5px;
+    stroke-linejoin: round;
+    stroke-linecap: round;
+}
+circle {
+    fill: #FFF;
+    stroke: #000;
+    stroke-width: 2;
+}
+text {
+    font-family: NanumBarunGothic;
+}
+text.stn {
+    text-anchor: middle;
+    font-size: 32px;
+}
+text.stn_l {
+    text-anchor: start;
+    font-size: 32px;
+}
+text.stn_r {
+    text-anchor: end;
+    font-size: 32px;
+}
