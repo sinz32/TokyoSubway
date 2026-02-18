@@ -45,6 +45,15 @@ if ($lineId == 'A' || $lineId == 'I' || $lineId == 'S' || $lineId == 'E') {
         'S' => 'odpt.RailDirection:Westbound',
         'E' => 'odpt.RailDirection:InnerLoop'
     );
+    $types = array(
+        'Local' => '보통',
+        'Express' => '급행',
+        'LimitedExpress' => '특급',
+        'RapidLimitedExpress' => '쾌속특급',
+        'AirportRapidLimitedExpress' => '에어포트 쾌특',
+        'AccessExpress' => '엑세스 특급',
+        'Rapid' => '쾌속'
+    );
 
     for($n=0;$n<count($data);$n++){
         $stn = $data[$n]['odpt:toStation'];
@@ -67,13 +76,20 @@ if ($lineId == 'A' || $lineId == 'I' || $lineId == 'S' || $lineId == 'E') {
         if ($is_up[$lineId] == $data[$n]['odpt:railDirection']) {
             $dir = 'up';
         }
+        
+        $type = explode('.', $data[$n]['odpt:trainType']);
+        $type = $type[count($type)-1];
+        if(isset($types[$type])) {
+            $type = $types[$type];
+        }
 
         $data[$n] = array(
             'no' => $data[$n]['odpt:trainNumber'],
             'stn' => $stn,
             'sts' => $sts,
             'terminal' => $terminal,
-            'dir' => $dir 
+            'dir' => $dir,
+            'type' => $type
         );
     }
 
@@ -93,7 +109,8 @@ if ($lineId == 'A' || $lineId == 'I' || $lineId == 'S' || $lineId == 'E') {
                 $result[$n][$data[$m]['dir']][] = array(
                     'no' => $data[$m]['no'],
                     'sts' => $data[$m]['sts'],
-                    'terminal' => $data[$m]['terminal']
+                    'terminal' => $data[$m]['terminal'],
+                    'type' => $data[$m]['type']
                 );
             }
         }
