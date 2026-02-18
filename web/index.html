@@ -310,8 +310,8 @@
             var circle = '<circle cx="50" cy="' + cy + '" r="9"/><circle cx="100" cy="' + cy + '" r="9"/>';
             var json = JSON.stringify(data);
             return '<line x1="50" y1="' + cy + '" x2="150" y2="' + cy + '" stroke="#EEE" />' +
-                '<text class="stn_l" x=' + x + ' y=' + (y - 8) + ' fill=' + color + ' onclick=\'showTrainInfo(' + json + ');\'>' + data.stn.ja + '</text>' +
-                '<text class="stn_l" x=' + x + ' y=' + (y + 24) + ' fill=' + color + ' onclick=\'showTrainInfo(' + json + ');\'>' + data.stn.ko + '</text>' +
+                '<text class="stn_l" x=' + (x-10) + ' y=' + (y - 8) + ' fill=' + color + ' onclick=\'showTrainInfo(' + json + ');\'>' + data.stn.ja + '</text>' +
+                '<text class="stn_l" x=' + (x-10) + ' y=' + (y + 24) + ' fill=' + color + ' onclick=\'showTrainInfo(' + json + ');\'>' + data.stn.ko + '</text>' +
                 circle;
         }
 
@@ -321,8 +321,8 @@
             var circle = '<circle cx="750" cy="' + cy + '" r="9"/><circle cx="700" cy="' + cy + '" r="9"/>';
             var json = JSON.stringify(data);
             return '<line x1="650" y1="' + cy + '" x2="750" y2="' + cy + '" stroke="#EEE" />' +
-                '<text class="stn_r" x=' + x + ' y=' + (y - 6) + ' fill=' + color + ' onclick=\'showTrainInfo(' + json + ');\'>' + data.stn.ja + '</text>' +
-                '<text class="stn_r" x=' + x + ' y=' + (y + 22) + ' fill=' + color + ' onclick=\'showTrainInfo(' + json + ');\'>' + data.stn.ko + '</text>' +
+                '<text class="stn_r" x=' + (x+10) + ' y=' + (y - 8) + ' fill=' + color + ' onclick=\'showTrainInfo(' + json + ');\'>' + data.stn.ja + '</text>' +
+                '<text class="stn_r" x=' + (x+10) + ' y=' + (y + 24) + ' fill=' + color + ' onclick=\'showTrainInfo(' + json + ');\'>' + data.stn.ko + '</text>' +
                 circle;
         }
 
