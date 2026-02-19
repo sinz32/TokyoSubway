@@ -1,5 +1,7 @@
 # 도쿄 지하철 운행 정보
 © 2023-2026 SinZ, All rights reserved.
+ - [웹버전은 여기서 사용 가능](https://metro.sinz.me/tokyo/)
+ - [앱버전은 여기에서 다운로드 가능](https://github.com/sinz32/TokyoSubway/releases/tag/v1.0) (Android 전용)
 
 # 지원하는 노선 목록
 
